@@ -6,7 +6,7 @@
   <title>WTParty Waitlist</title>
   <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/7/7e/Party_icon.png" type="image/png">
 
-  <!-- Tailwind for styling -->
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
@@ -16,28 +16,26 @@
       font-family: 'Poppins', sans-serif;
     }
 
-    /* Neon text */
+    /* Neon text colors */
     .neon-pink { color: #ff00cc; }
     .neon-turquoise { color: #00fff2; }
 
-    /* Neon pulse heading */
+    /* Neon pulse animation for headings */
     @keyframes neonPulse {
-      0%,100% { text-shadow: 0 0 5px #ff00cc,0 0 15px #00fff2,0 0 25px #ff00cc; }
-      50% { text-shadow: 0 0 15px #ff00cc,0 0 30px #00fff2,0 0 45px #ff00cc; }
+      0%, 100% { text-shadow: 0 0 5px #ff00cc, 0 0 15px #00fff2, 0 0 25px #ff00cc; }
+      50% { text-shadow: 0 0 15px #ff00cc, 0 0 30px #00fff2, 0 0 45px #ff00cc; }
     }
     .glow { animation: neonPulse 2.5s infinite alternate; }
 
-    /* Neon pulse button */
-    .pulse { animation: neonPulseButton 1s infinite alternate; }
-    @keyframes neonPulseButton {
-      0% { box-shadow:0 0 10px #ff00cc,0 0 20px #00fff2; }
-      50% { box-shadow:0 0 20px #ff00cc,0 0 40px #00fff2; }
-      100% { box-shadow:0 0 10px #ff00cc,0 0 20px #00fff2; }
+    /* Neon pulse for submit button */
+    .pulse {
+      animation: neonPulseButton 1s infinite alternate;
     }
-
-    /* Optional: subtle background pulse */
-    @keyframes backgroundPulse { 0%,100% { background-position:0% 50%; } 50% { background-position:100% 50%; } }
-    body { background: linear-gradient(270deg,#ff00cc,#00fff2,#ff00cc); background-size:600% 600%; animation:backgroundPulse 15s ease infinite; }
+    @keyframes neonPulseButton {
+      0% { box-shadow: 0 0 10px #ff00cc, 0 0 20px #00fff2; }
+      50% { box-shadow: 0 0 20px #ff00cc, 0 0 40px #00fff2; }
+      100% { box-shadow: 0 0 10px #ff00cc, 0 0 20px #00fff2; }
+    }
   </style>
 </head>
 <body class="flex flex-col items-center justify-center min-h-screen px-6 sm:px-8 text-center">
@@ -50,7 +48,7 @@
     </p>
 
     <!-- Classic HTML form POST -->
-    <form id="waitlist-form" action="https://script.googleusercontent.com/macros/echo?user_content_key=AehSKLjZyKlnsoKB58-85kA7n21E2i1elnobXrXAJT8fj9FEYWFey42BOPDJ-wuux5ofauWi8mAP5fnULVU6YLf-5d_4T7M8LttnDNRFS3gcWesFdB-Qm9KvsDUoSVbp_gHbs8nGAEACcN8ij8R8ETUGXkOXc_7toVVfabvYVmlIV44sx9Gtv93iN6VNguzMpYZ30S8kM7YUd9iEtrQEeGwJfKzrK2IP308WDgzbJ2W5mQSN9p5ZrYL9gknXJihSm9vubGd0SEIWgmpmN3xn5RBBjmhbRn9yCw&lib=MZntzkHAjwncx8siTW2fKkzuikwMA3wEd" method="POST" target="hidden_iframe"
+    <form id="waitlist-form" action="YOUR_WEB_APP_URL_HERE" method="POST" target="hidden_iframe"
           class="space-y-4 bg-black/50 p-6 rounded-2xl border border-pink-500 shadow-lg">
       <input type="text" name="name" placeholder="Your Name" required
              class="w-full px-4 py-2 bg-transparent border border-pink-500 rounded-xl text-white placeholder-gray-400 focus:ring-2 focus:ring-pink-400" />
@@ -66,7 +64,7 @@
       🎉 You're on the list! We'll notify you when the party starts.
     </p>
 
-    <!-- Hidden iframe to prevent reload -->
+    <!-- Hidden iframe to handle form submission -->
     <iframe name="hidden_iframe" style="display:none;"></iframe>
 
     <footer class="mt-12 text-gray-500 text-sm">
@@ -80,11 +78,12 @@
     const successMessage = document.getElementById('success-message');
 
     form.addEventListener('submit', () => {
+      // Show neon pulse while submitting
       submitButton.disabled = true;
       submitButton.classList.add('pulse');
       submitButton.textContent = "Submitting...";
 
-      // Show success message after short delay
+      // After 1 second, simulate success (Apps Script will add to Sheet)
       setTimeout(() => {
         successMessage.classList.remove('hidden');
         submitButton.disabled = false;
@@ -96,6 +95,7 @@
   </script>
 </body>
 </html>
+
 
 
 
