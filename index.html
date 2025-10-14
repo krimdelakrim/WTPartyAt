@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Where The Party At | Find the Party Before It Starts</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: 'Poppins', sans-serif;
+    }
+    .neon-pink { color: #ff00cc; }
+    .neon-turquoise { color: #00fff2; }
+    .glow {
+      text-shadow: 0 0 10px #ff00cc, 0 0 20px #00fff2, 0 0 30px #ff00cc;
+    }
+    input, button {
+      outline: none;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center text-center px-4">
+  <div class="max-w-lg w-full">
+    <h1 class="text-4xl md:text-5xl font-bold mb-4 glow neon-pink">Where The Party At</h1>
+    <p class="text-lg text-gray-300 mb-6 italic">Find the party before it starts</p>
+
+    <p class="text-base text-gray-400 mb-8">
+      Where The Party At helps you discover trending events and parties near you in real time — 
+      and gives businesses a smarter way to promote their events.
+    </p>
+
+    <form id="waitlist-form" class="space-y-4 bg-black/40 p-6 rounded-2xl border border-pink-500 shadow-lg">
+      <input type="text" id="name" name="name" placeholder="Your Name" required
+             class="w-full px-4 py-2 bg-transparent border border-pink-500 rounded-xl text-white placeholder-gray-400 focus:ring-2 focus:ring-pink-400" />
+      <input type="email" id="email" name="email" placeholder="Your Email" required
+             class="w-full px-4 py-2 bg-transparent border border-pink-500 rounded-xl text-white placeholder-gray-400 focus:ring-2 focus:ring-pink-400" />
+      <button type="submit"
+              class="w-full bg-gradient-to-r from-pink-500 to-teal-400 text-black font-bold py-2 rounded-xl hover:scale-105 transition-transform">
+        Join the Waitlist
+      </button>
+    </form>
+
+    <p id="success-message" class="hidden text-green-400 mt-6 font-semibold">
+      🎉 You're on the list! We'll notify you when the party starts.
+    </p>
+
+    <footer class="mt-12 text-gray-500 text-sm">
+      © 2025 Where The Party At. All rights reserved.
+    </footer>
+  </div>
+
+  <script>
+    const form = document.getElementById('waitlist-form');
+    const successMessage = document.getElementById('success-message');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+
+      // 🔗 Replace this URL with your Google Apps Script Web App URL
+      const scriptURL = "YOUR_WEB_APP_URL_HERE";
+
+      const response = await fetch(scriptURL, {
+        method: "POST",
+        body: JSON.stringify({ name, email }),
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (response.ok) {
+        form.reset();
+        successMessage.classList.remove('hidden');
+      } else {
+        alert("Something went wrong. Please try again.");
+      }
+    });
+  </script>
+</body>
+</html>
