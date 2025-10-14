@@ -47,8 +47,8 @@
       Discover trending events and parties near you in real time — perfect for users and businesses.
     </p>
 
-    <!-- Classic HTML form POST -->
-    <form id="waitlist-form" action="https://script.google.com/macros/s/AKfycbyUFJDLxk25DI34L3-3hRhx7Cvjc9FCg5p7DDyvgPGpRqguwNaVE9-RVT8BCK4s084k/exec" method="POST" target="hidden_iframe"
+    <!-- HTML form POST to Google Apps Script -->
+    <form id="waitlist-form" action="https://script.google.com/macros/s/AKfycbwl2IcPf9uLMObQ9syJba_Fsxbc9uo-ZOYRJt1qurm30rDyYK65d79W6gguarnLJy06/exec" method="POST" target="hidden_iframe"
           class="space-y-4 bg-black/50 p-6 rounded-2xl border border-pink-500 shadow-lg">
       <input type="text" name="name" placeholder="Your Name" required
              class="w-full px-4 py-2 bg-transparent border border-pink-500 rounded-xl text-white placeholder-gray-400 focus:ring-2 focus:ring-pink-400" />
@@ -76,25 +76,32 @@
     const form = document.getElementById('waitlist-form');
     const submitButton = document.getElementById('submit-button');
     const successMessage = document.getElementById('success-message');
+    const iframe = document.getElementsByName('hidden_iframe')[0];
 
+    // When form submits
     form.addEventListener('submit', () => {
-      // Show neon pulse while submitting
       submitButton.disabled = true;
       submitButton.classList.add('pulse');
       submitButton.textContent = "Submitting...";
+      successMessage.classList.add('hidden');
+    });
 
-      // After 1 second, simulate success (Apps Script will add to Sheet)
-      setTimeout(() => {
+    // Detect iframe load (after successful form submission)
+    iframe.onload = () => {
+      // Only trigger if form was just submitted
+      if (submitButton.disabled) {
         successMessage.classList.remove('hidden');
         submitButton.disabled = false;
         submitButton.classList.remove('pulse');
         submitButton.textContent = "Join the Waitlist";
         form.reset();
-      }, 1000);
-    });
+      }
+    };
   </script>
 </body>
 </html>
+
+
 
 
 
