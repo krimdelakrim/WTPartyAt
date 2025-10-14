@@ -51,9 +51,17 @@
 
     <!-- Classic HTML form POST -->
    <form action="YOUR_WEB_APP_URL_HERE" method="POST" target="hidden_iframe">
-  <input type="text" name="name" placeholder="Your Name" required>
-  <input type="email" name="email" placeholder="Your Email" required>
-  <button type="submit">Join the Waitlist</button>
+  <input type="text" name="name" placeholder="Your Name" required
+       class="w-full px-4 py-2 bg-transparent border border-pink-500 rounded-xl text-white placeholder-gray-400 focus:ring-2 focus:ring-pink-400" />
+
+<input type="email" name="email" placeholder="Your Email" required
+       class="w-full px-4 py-2 bg-transparent border border-pink-500 rounded-xl text-white placeholder-gray-400 focus:ring-2 focus:ring-pink-400" />
+
+<button type="submit"
+        class="w-full bg-gradient-to-r from-pink-500 to-teal-400 text-black font-bold py-2 rounded-xl hover:scale-105 transition-transform">
+  Join the Waitlist
+</button>
+
 </form>
 <iframe name="hidden_iframe" style="display:none;"></iframe>
 
@@ -89,6 +97,7 @@
   </script>
 </body>
 </html>
+
 
 
 
