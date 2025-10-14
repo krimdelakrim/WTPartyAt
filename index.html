@@ -6,7 +6,7 @@
   <title>WTParty Waitlist</title>
   <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/7/7e/Party_icon.png" type="image/png">
 
-  <!-- Tailwind for styling -->
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
@@ -16,18 +16,18 @@
       font-family: 'Poppins', sans-serif;
     }
 
-    /* Neon text */
+    /* Neon text colors */
     .neon-pink { color: #ff00cc; }
     .neon-turquoise { color: #00fff2; }
 
-    /* Neon glow pulse for headings */
+    /* Neon pulse animation for headings */
     @keyframes neonPulse {
       0%, 100% { text-shadow: 0 0 5px #ff00cc, 0 0 15px #00fff2, 0 0 25px #ff00cc; }
       50% { text-shadow: 0 0 15px #ff00cc, 0 0 30px #00fff2, 0 0 45px #ff00cc; }
     }
     .glow { animation: neonPulse 2.5s infinite alternate; }
 
-    /* Neon pulse for button */
+    /* Neon pulse for submit button */
     .pulse {
       animation: neonPulseButton 1s infinite alternate;
     }
@@ -42,17 +42,17 @@
 
   <div class="max-w-md w-full">
     <h1 class="text-4xl sm:text-5xl font-bold mb-4 glow neon-pink">WTParty Waitlist</h1>
-    <p class="text-lg text-gray-300 mb-4 italic">
-      Find the party before it starts
-    </p>
+    <p class="text-lg text-gray-300 mb-4 italic">Find the party before it starts</p>
     <p class="text-sm sm:text-base text-gray-400 mb-8">
       Discover trending events and parties near you in real time — perfect for users and businesses.
     </p>
 
-    <form id="waitlist-form" class="space-y-4 bg-black/50 p-6 rounded-2xl border border-pink-500 shadow-lg">
-      <input type="text" id="name" name="name" placeholder="Your Name" required
+    <!-- Classic HTML form POST -->
+    <form id="waitlist-form" action="YOUR_WEB_APP_URL_HERE" method="POST" target="hidden_iframe"
+          class="space-y-4 bg-black/50 p-6 rounded-2xl border border-pink-500 shadow-lg">
+      <input type="text" name="name" placeholder="Your Name" required
              class="w-full px-4 py-2 bg-transparent border border-pink-500 rounded-xl text-white placeholder-gray-400 focus:ring-2 focus:ring-pink-400" />
-      <input type="email" id="email" name="email" placeholder="Your Email" required
+      <input type="email" name="email" placeholder="Your Email" required
              class="w-full px-4 py-2 bg-transparent border border-pink-500 rounded-xl text-white placeholder-gray-400 focus:ring-2 focus:ring-pink-400" />
       <button id="submit-button" type="submit"
               class="w-full bg-gradient-to-r from-pink-500 to-teal-400 text-black font-bold py-2 rounded-xl hover:scale-105 transition-transform">
@@ -64,6 +64,9 @@
       🎉 You're on the list! We'll notify you when the party starts.
     </p>
 
+    <!-- Hidden iframe to handle form submission -->
+    <iframe name="hidden_iframe" style="display:none;"></iframe>
+
     <footer class="mt-12 text-gray-500 text-sm">
       © 2025 WTParty. All rights reserved.
     </footer>
@@ -74,45 +77,25 @@
     const submitButton = document.getElementById('submit-button');
     const successMessage = document.getElementById('success-message');
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const name = document.getElementById('name').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const scriptURL = "https://script.google.com/macros/s/AKfycbz4uihH8OXFut0gdtw0xJW7WAeYHvIWB1FCVZZekPb561i_LF8jnmGSSTAo4MZEYd_p/exec"; // <-- replace with your Google Apps Script /exec URL
-
-      // Disable button & start pulse animation
+    form.addEventListener('submit', () => {
+      // Show neon pulse while submitting
       submitButton.disabled = true;
       submitButton.classList.add('pulse');
       submitButton.textContent = "Submitting...";
 
-      try {
-        const response = await fetch(scriptURL, {
-          method: "POST",
-          body: JSON.stringify({ name, email }),
-          headers: { "Content-Type": "application/json" },
-        });
-
-        const data = await response.json();
-
-        if (data.status === "Success") {
-          form.reset();
-          successMessage.classList.remove('hidden');
-        } else {
-          alert("Something went wrong: " + data.message);
-        }
-      } catch (error) {
-        console.error(error);
-        alert("Connection failed. Check your Apps Script URL.");
-      } finally {
+      // After 1 second, simulate success (Apps Script will add to Sheet)
+      setTimeout(() => {
+        successMessage.classList.remove('hidden');
         submitButton.disabled = false;
         submitButton.classList.remove('pulse');
         submitButton.textContent = "Join the Waitlist";
-      }
+        form.reset();
+      }, 1000);
     });
   </script>
 </body>
 </html>
+
 
 
 
