@@ -36,12 +36,34 @@
       50% { box-shadow: 0 0 20px #ff00cc, 0 0 40px #00fff2; }
       100% { box-shadow: 0 0 10px #ff00cc, 0 0 20px #00fff2; }
     }
+
+    /* Neon pulse animation for heading */
+@keyframes neonPulseHeading {
+  0%, 100% { text-shadow: 0 0 5px #ff00cc, 0 0 15px #00fff2, 0 0 25px #ff00cc; }
+  50% { text-shadow: 0 0 20px #ff00cc, 0 0 40px #00fff2, 0 0 60px #ff00cc; }
+}
+
+/* Neon pulse animation for button */
+@keyframes neonPulseButton {
+  0%, 100% { box-shadow: 0 0 10px #ff00cc, 0 0 20px #00fff2; }
+  50% { box-shadow: 0 0 25px #ff00cc, 0 0 50px #00fff2; }
+}
+
+/* Apply animation classes */
+.pulse-heading {
+  animation: neonPulseHeading 1.5s infinite alternate;
+}
+
+.pulse-button {
+  animation: neonPulseButton 1s infinite alternate;
+}
+
   </style>
 </head>
 <body class="flex flex-col items-center justify-center min-h-screen px-6 sm:px-8 text-center">
 
   <div class="max-w-md w-full">
-    <h1 class="text-4xl sm:text-5xl font-bold mb-4 glow neon-pink">WTParty Waitlist</h1>
+    <h1 class="text-4xl sm:text-5xl font-bold mb-4 glow neon-pink">WTPartyAt Waitlist</h1>
     <p class="text-lg text-gray-300 mb-4 italic">Find the party before it starts</p>
     <p class="text-sm sm:text-base text-gray-400 mb-8">
       Discover trending events and parties near you in real time — perfect for users and businesses.
@@ -68,10 +90,15 @@
         </label>
       </div>
       
-      <button id="submit-button" type="submit"
-              class="w-full bg-gradient-to-r from-pink-500 to-teal-400 text-black font-bold py-2 rounded-xl hover:scale-105 transition-transform">
-        Join the Waitlist
-      </button>
+      <h1 class="text-4xl sm:text-5xl font-bold mb-4 neon-pink pulse-heading">
+  WTParty Waitlist
+</h1>
+
+<button id="submit-button" type="submit"
+        class="w-full bg-gradient-to-r from-pink-500 to-teal-400 text-black font-bold py-2 rounded-xl hover:scale-105 transition-transform pulse-button">
+  Join the Waitlist
+</button>
+
     </form>
 
     <p id="success-message" class="hidden text-green-400 mt-6 font-semibold">
@@ -226,6 +253,7 @@ form.addEventListener('input', () => {
 
 </body>
 </html>
+
 
 
 
