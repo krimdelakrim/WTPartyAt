@@ -220,35 +220,12 @@ document.addEventListener('visibilitychange', () => {
 });
 </script>
 
-  const preserveCheckbox = document.getElementById('preserve-data');
-
-// Save the preference in localStorage
-preserveCheckbox.addEventListener('change', () => {
-  localStorage.setItem('preserveFormData', preserveCheckbox.checked ? 'true' : 'false');
-});
-
-// Restore the preference on page load
-window.addEventListener('DOMContentLoaded', () => {
-  const preserve = localStorage.getItem('preserveFormData');
-  if (preserve !== null) {
-    preserveCheckbox.checked = preserve === 'true';
-  }
-});
-
-// When form changes, only save if toggle is checked
-form.addEventListener('input', () => {
-  if (preserveCheckbox.checked) {
-    const data = {};
-    Array.from(form.elements).forEach(el => { if (el.name) data[el.name] = el.value; });
-    localStorage.setItem('waitlistForm', JSON.stringify(data));
-  } else {
-    localStorage.removeItem('waitlistForm');
-  }
-});
+ 
 
 
 </body>
 </html>
+
 
 
 
