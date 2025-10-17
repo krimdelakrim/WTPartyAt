@@ -53,8 +53,11 @@
              class="w-full px-4 py-2 bg-transparent border border-pink-500 rounded-xl text-white placeholder-gray-400 focus:ring-2 focus:ring-pink-400" />
       <input type="email" name="email" placeholder="Your Email" required
              class="w-full px-4 py-2 bg-transparent border border-pink-500 rounded-xl text-white placeholder-gray-400 focus:ring-2 focus:ring-pink-400" />
-      <input type="phone" name="phone" placeholder="Phone Number" optional
-             class="w-full px-4 py-2 bg-transparent border border-pink-500 rounded-xl text-white placeholder-gray-400 focus:ring-2 focus:ring-pink-400" />
+      <p class="text-sm text-gray-300 mb-1">
+    If you'd like to receive text alerts, enter your phone number (optional):
+  </p>
+  <input type="tel" name="phone" placeholder="Phone Number (optional)"
+         class="w-full px-4 py-2 bg-transparent border border-pink-500 rounded-xl text-white placeholder-gray-400 focus:ring-2 focus:ring-pink-400" />
 
        <!-- Clickwrap Checkbox -->
       <div class="flex items-start space-x-2 text-left text-sm">
@@ -223,6 +226,7 @@ form.addEventListener('input', () => {
 
 </body>
 </html>
+
 
 
 
