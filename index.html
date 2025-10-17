@@ -48,15 +48,23 @@
     </p>
 
     <!-- HTML form POST to Google Apps Script -->
-    <form id="waitlist-form"
-          action="https://script.google.com/macros/s/AKfycbwJctTX60GgNfQGPeEC11Iil0xs3Jap0WOWIBbLAqWb2LdcFA4cC4FeNjDK6hdRJodK/exec"
-          method="POST"
-          target="hidden_iframe"
-          class="space-y-4 bg-black/50 p-6 rounded-2xl border border-pink-500 shadow-lg"g">
+  <form id="waitlist-form" class="space-y-4 card-bg p-6 rounded-2xl border border-pink-500 shadow-lg">
       <input type="text" name="name" placeholder="Your Name" required
              class="w-full px-4 py-2 bg-transparent border border-pink-500 rounded-xl text-white placeholder-gray-400 focus:ring-2 focus:ring-pink-400" />
       <input type="email" name="email" placeholder="Your Email" required
              class="w-full px-4 py-2 bg-transparent border border-pink-500 rounded-xl text-white placeholder-gray-400 focus:ring-2 focus:ring-pink-400" />
+      <input type="phone" name="phone" placeholder="Phone Number" optional
+             class="w-full px-4 py-2 bg-transparent border border-pink-500 rounded-xl text-white placeholder-gray-400 focus:ring-2 focus:ring-pink-400" />
+
+       <!-- Clickwrap Checkbox -->
+      <div class="flex items-start space-x-2 text-left text-sm">
+        <input type="checkbox" id="consent" name="consent" required class="mt-1 accent-pink-500">
+        <label for="consent" class="text-white">
+          I agree to the
+          <a href="terms-of-service.html" class="neon-link">Terms of Service</a>.
+        </label>
+      </div>
+      
       <button id="submit-button" type="submit"
               class="w-full bg-gradient-to-r from-pink-500 to-teal-400 text-black font-bold py-2 rounded-xl hover:scale-105 transition-transform">
         Join the Waitlist
@@ -67,8 +75,6 @@
       🎉 You're on the list! We'll notify you when the party starts.
     </p>
 
-    <!-- Hidden iframe to handle form submission -->
-    <iframe name="hidden_iframe" style="display:none;"></iframe>
 
     <footer class="mt-12 text-gray-500 text-sm">
       © 2025 WTParty. All rights reserved.
@@ -76,33 +82,148 @@
   </div>
 
   <script>
-    const form = document.getElementById('waitlist-form');
-    const submitButton = document.getElementById('submit-button');
-    const successMessage = document.getElementById('success-message');
-    const iframe = document.getElementsByName('hidden_iframe')[0];
+const form = document.getElementById('waitlist-form');
+const submitButton = document.getElementById('submit-button');
+const successMessage = document.getElementById('success-message');
+const consentCheckbox = document.getElementById('consent');
+const SCRIPT_URL = "https://script.google.com/macros/s/https://script.google.com/macros/s/AKfycbwMv6aKOgHcmyZdxfUE36u6KBmUXmJkyXhoQGouM8QLi20rcDaiRVpoJPMKAmmnRXSw/exec";
 
-    // When form submits
-    form.addEventListener('submit', () => {
-      submitButton.disabled = true;
-      submitButton.classList.add('pulse');
-      submitButton.textContent = "Submitting...";
-      successMessage.classList.add('hidden');
+// --- SESSION-BASED STORAGE ---
+// We'll use both localStorage (for back navigation) and sessionStorage (for true refresh detection).
+if (!sessionStorage.getItem('activeSession')) {
+  // New session started — clear stored form data
+  localStorage.removeItem('waitlistForm');
+  sessionStorage.setItem('activeSession', 'true');
+}
+
+// --- Restore saved form state ---
+window.addEventListener('DOMContentLoaded', () => {
+  document.body.classList.add('loaded');
+  const savedData = localStorage.getItem('waitlistForm');
+  if (savedData) {
+    const data = JSON.parse(savedData);
+    Object.keys(data).forEach(key => {
+      if (form.elements[key]) form.elements[key].value = data[key];
     });
+  }
+});
 
-    // Detect iframe load (after successful form submission)
-    iframe.onload = () => {
-      // Only trigger if form was just submitted
-      if (submitButton.disabled) {
-        successMessage.classList.remove('hidden');
-        submitButton.disabled = false;
-        submitButton.classList.remove('pulse');
-        submitButton.textContent = "Join the Waitlist";
-        form.reset();
-      }
-    };
-  </script>
+// --- Save form state on input ---
+form.addEventListener('input', () => {
+  const data = {};
+  Array.from(form.elements).forEach(el => {
+    if (el.name) data[el.name] = el.value;
+  });
+  localStorage.setItem('waitlistForm', JSON.stringify(data));
+});
+
+// --- Handle form submission ---
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  if (!consentCheckbox.checked) {
+    alert("You must agree to the Privacy Policy and Terms of Service to continue.");
+    return;
+  }
+
+  submitButton.disabled = true;
+  submitButton.textContent = "Submitting...";
+  submitButton.classList.add('pulse');
+  successMessage.classList.add('hidden');
+
+  const formData = new FormData(form);
+
+  try {
+    const response = await fetch(SCRIPT_URL, { method: 'POST', body: formData });
+
+    if (response.ok) {
+      successMessage.classList.remove('hidden');
+      successMessage.textContent = "🎉 You're on the list! We'll notify you when the party starts.";
+      form.reset();
+      localStorage.removeItem('waitlistForm');
+    } else {
+      const text = await response.text();
+      successMessage.classList.remove('hidden');
+      successMessage.textContent = "⚠️ Error submitting: " + text;
+    }
+  } catch (err) {
+    successMessage.classList.remove('hidden');
+    successMessage.textContent = "⚠️ Network error: " + err.message;
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = "Join the Waitlist";
+    submitButton.classList.remove('pulse');
+  }
+});
+</script>
+
+    <!-- Fade transitions for navigation -->
+ <script>
+window.addEventListener('DOMContentLoaded', () => {
+  document.body.classList.add('loaded');
+});
+
+// Handle smooth fade-out for internal links
+document.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', (e) => {
+    const href = link.getAttribute('href');
+    if (href && !href.startsWith('#')) {
+      e.preventDefault();
+      document.body.classList.remove('loaded');
+      // Navigate after a short fade delay
+      setTimeout(() => {
+        window.location.href = href;
+      }, 250); // slightly faster fade for snappier feel
+    }
+  });
+});
+
+// Instantly show content when user navigates back
+window.addEventListener('pageshow', (event) => {
+  if (event.persisted) {
+    // Page loaded from cache (like a back button)
+    document.body.classList.add('loaded');
+  }
+});
+
+// Fallback for some browsers (Safari/iOS)
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') {
+    document.body.classList.add('loaded');
+  }
+});
+</script>
+
+  const preserveCheckbox = document.getElementById('preserve-data');
+
+// Save the preference in localStorage
+preserveCheckbox.addEventListener('change', () => {
+  localStorage.setItem('preserveFormData', preserveCheckbox.checked ? 'true' : 'false');
+});
+
+// Restore the preference on page load
+window.addEventListener('DOMContentLoaded', () => {
+  const preserve = localStorage.getItem('preserveFormData');
+  if (preserve !== null) {
+    preserveCheckbox.checked = preserve === 'true';
+  }
+});
+
+// When form changes, only save if toggle is checked
+form.addEventListener('input', () => {
+  if (preserveCheckbox.checked) {
+    const data = {};
+    Array.from(form.elements).forEach(el => { if (el.name) data[el.name] = el.value; });
+    localStorage.setItem('waitlistForm', JSON.stringify(data));
+  } else {
+    localStorage.removeItem('waitlistForm');
+  }
+});
+
+
 </body>
 </html>
+
 
 
 
