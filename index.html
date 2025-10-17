@@ -164,7 +164,7 @@ form.addEventListener('submit', async (e) => {
 
     if (response.ok) {
       successMessage.classList.remove('hidden');
-      successMessage.textContent = "🎉 You're on the list! We'll notify you when the party starts.";
+      successMessage.textContent = "🎉 You're on the list! We'll notify you before the party starts.";
       form.reset();
       localStorage.removeItem('waitlistForm');
     } else {
@@ -225,6 +225,7 @@ document.addEventListener('visibilitychange', () => {
 
 </body>
 </html>
+
 
 
 
